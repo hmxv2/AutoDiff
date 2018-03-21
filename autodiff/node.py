@@ -28,6 +28,18 @@ class Node(object):
       new_node = add_byconst_op(self, other)
     return new_node
 
+  def __neg__(self):
+    """take the negative value return a new node"""
+    from .op import neg_op
+    return neg_op(self)
+
+  def __sub__(self, other):
+    """Substracting a node by another and return a new node"""
+    return self + (-other)
+
+  def __rsub__(self, other):
+    return other + (-self)
+
   def __mul__(self, other):
     """Multiply two nodes return a new node."""
     from .op import mul_op, mul_byconst_op
@@ -39,6 +51,19 @@ class Node(object):
       new_node = mul_byconst_op(self, other)
     return new_node
 
+  def __truediv__(self, other):
+    """Divide a node by another, return a new node."""
+    from .op import recipr_op
+    if isinstance(other, Node):
+      new_node = self * recipr_op(other)
+    else:
+      new_node = self * (1.0 / other)
+    return new_node
+    
+  def __rtruediv__(self, other):
+    """Divide a node by another, return a new node."""
+    from .op import recipr_op
+    return other * recipr_op(self)
 
   # Allow left-hand-side add and multiply.
   __radd__ = __add__
